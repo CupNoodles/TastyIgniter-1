@@ -1,24 +1,28 @@
 version: '2'
 services:
  app:
-  image: thisisqasim/tastyigniter
-#  build: .
+  build: .
   container_name: tasty_app
   ports:
-  - "8001:80"
+  - "9001:80"
+  - "9443:443"
   environment:
   - MYSQL_HOSTNAME=db
   - MYSQL_DATABASE=tastyigniter
   - MYSQL_USER=tastyigniter
   - MYSQL_PASSWORD=somepassword
   restart: always
+  volumes: 
+  - ./html/:/var/www/html/
+  - ./nginx/localhost.crt:/etc/nginx/my-site.com.crt # New Line!
+  - ./nginx/localhost.key:/etc/nginx/my-site.com.key # New Line!
  db:
   image: mariadb
-  container_name: tasty_db
+  container_name: db
   volumes:
   - db_data:/var/lib/mysql
   environment:
-  - MYSQL_RANDOM_ROOT_PASSWORD=yes
+  - MYSQL_ROOT_PASSWORD=somewordpress
   - MYSQL_DATABASE=tastyigniter
   - MYSQL_USER=tastyigniter
   - MYSQL_PASSWORD=somepassword
